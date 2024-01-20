@@ -28,6 +28,7 @@ func UserRoutes(router *gin.Engine) {
 		//booking
 		r.POST("/bookings/:user_id", controllers.BookingService)
 		r.GET("/getbooking/:user_id", controllers.GetBooking)
+		r.GET("/get-booking-details",controllers.GetBookingDetails)
 		r.GET("/serivicers", controllers.GetAllServicer)
 
 		r.GET("/popularservicer/:id", controllers.PopularServicers)

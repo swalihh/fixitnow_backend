@@ -41,6 +41,7 @@ func BookingService(c *gin.Context) {
 }
 
 type BookingDetail struct {
+	Id              int    `json:"id"`
 	Date            string `json:"date"`
 	Time            string `json:"time"`
 	Description     string `json:"description"`
@@ -51,7 +52,7 @@ type BookingDetail struct {
 	ServiceAmount   int    `json:"serviceamount"`
 	Status          string `json:"status"`
 	ServicerImage   string `json:"servicerimage"`
-	Location             string `json:"location"`
+	Location        string `json:"location"`
 }
 
 func GetBooking(c *gin.Context) {
@@ -60,7 +61,7 @@ func GetBooking(c *gin.Context) {
 	var booking []BookingDetail
 
 	if err := database.DB.Table("bookings").
-		Select("bookings.date,bookings.time,bookings.description,servicers.full_name,servicers.user_name,servicers.phone_number,servicers.service_catagory,bookings.service_amount,bookings.status,servicers.servicer_image,servicers.location").
+		Select("bookings.id,bookings.date,bookings.time,bookings.description,servicers.full_name,servicers.user_name,servicers.phone_number,servicers.service_catagory,bookings.service_amount,bookings.status,servicers.servicer_image,servicers.location").
 		Joins("INNER JOIN servicers ON servicers.id=bookings.servicer_id").Where("bookings.user_id=?", id).Find(&booking).Error; err != nil {
 		c.JSON(400, gin.H{
 			"error": "failed to get data",

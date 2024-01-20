@@ -394,3 +394,21 @@ func SuccessRazorPay(c *gin.Context) {
 		"message": "successfully updated",
 	})
 }
+
+
+func GetBookingDetails(c *gin.Context) {
+	bookingId := c.Query("booking_id")
+	userId := c.Query("user_id")
+
+	var booking models.Booking
+	if err :=database.DB.Where("id=? AND user_id=?",bookingId,userId).First(&booking).Error; err != nil {
+		c.JSON(500,gin.H{
+			"error" :"Failed to get data",
+		})
+		return
+	}
+
+	c.JSON(200,gin.H{
+		"data":booking,
+	})
+}
