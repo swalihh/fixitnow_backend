@@ -258,7 +258,7 @@ func GetRateOfService(c *gin.Context) {
 	hour := float64(booking.EndingTime.Unix()-booking.StartingTime.Unix()) / 60 / 60
 	rate := hour * float64(booking.ServiceAmount)
 
-	database.DB.Model(models.Booking{}).Where("id=?", id).Update("revenue", rate)
+	database.DB.Model(models.Booking{}).Where("id=?", id).Update("revenue", int64(rate))
 
 	c.JSON(200, gin.H{
 		"rate":       int(rate),
