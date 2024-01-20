@@ -326,7 +326,7 @@ func CountOfAccepted(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("servicer_id"))
 
 	var count int
-	if err := database.DB.Table("bookings").Select("COUNT(*)").Where("servicer_id = ? AND status = ? OR status = ?", id, "Accepted", "Completed").Scan(&count).Error; err != nil {
+	if err := database.DB.Table("bookings").Select("COUNT(*)").Where("servicer_id = ? AND status IN(?,?)", id, "Accepted", "Completed").Scan(&count).Error; err != nil {
 		c.JSON(400, gin.H{
 			"error": "Failed to get count",
 		})
