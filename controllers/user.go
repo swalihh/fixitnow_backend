@@ -6,6 +6,7 @@ import (
 	"service-api/helpers"
 	"service-api/models"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -395,20 +396,38 @@ func SuccessRazorPay(c *gin.Context) {
 	})
 }
 
+type Booking struct {
+	Id            int       `json:"booking_id" gorm:"primaryKey"`
+	BuildingName  string    `json:"buildingname"`
+	City          string    `json:"city"`
+	Road          string    `json:"road"`
+	Phone         string    `json:"phone"`
+	Date          string    `json:"date"`
+	Time          string    `json:"time"`
+	Description   string    `json:"description"`
+	Servicer_id   int       `json:"servicerid"`
+	ServiceAmount int       `json:"serviceamount"`
+	User_Id       int       `json:"userid"`
+	Status        string    `json:"status"`
+	StartingTime  time.Time `json:"startingtime"`
+	EndingTime    time.Time `json:"endingtime"`
+	PaymentStatus string    `json:"payment_status" gorm:"default:Pending"`
+	Revenue       int64     `json:"revenue" gorm:"default:0"`
+}
 
 func GetBookingDetails(c *gin.Context) {
 	bookingId := c.Query("booking_id")
 	userId := c.Query("user_id")
 
-	var booking models.Booking
-	if err :=database.DB.Where("id=? AND user_id=?",bookingId,userId).First(&booking).Error; err != nil {
-		c.JSON(500,gin.H{
-			"error" :"Failed to get data",
+	var booking Booking
+	if err := database.DB.Where("id=? AND user_id=?", bookingId, userId).First(&booking).Error; err != nil {
+		c.JSON(500, gin.H{
+			"error": "Failed to get data",
 		})
 		return
 	}
 
-	c.JSON(200,gin.H{
-		"data":booking,
+	c.JSON(200, gin.H{
+		"data": booking,
 	})
 }
